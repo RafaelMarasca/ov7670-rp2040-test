@@ -1,0 +1,2 @@
+add_subdirectory(ov7670_i2c)
+add_subdirectory(ov7076_img_tx)
