@@ -6,14 +6,14 @@ HEIGHT = 240
 WIDTH = 240
 
 
-img = cv2.imread("shrek.jpg")
-img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
-y, u, v = cv2.split(img_yuv)
+# img = cv2.imread("shrek.jpg")
+# img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+# y, u, v = cv2.split(img_yuv)
 
 
-y = (np.uint8(y.reshape(240*240))).tolist()
-u = (np.uint8(u.reshape(240*240))).tolist()
-v = (np.uint8(v.reshape(240*240))).tolist()
+# y = (np.uint8(y.reshape(240*240))).tolist()
+# u = (np.uint8(u.reshape(240*240))).tolist()
+# v = (np.uint8(v.reshape(240*240))).tolist()
 
 # with open('shrek.txt', 'w') as f:
 #     f.write('char shrek [] = {')

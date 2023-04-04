@@ -1,5 +1,4 @@
 #include "pico/stdlib.h"
-#include "ov7670.h"
 #include <stdio.h>
 #include "IMG.h"
 
