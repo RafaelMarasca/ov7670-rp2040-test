@@ -29,26 +29,41 @@ int main()
 	uint vstop		= 494;
 
     ov7670_write_reg(ov7670, 0x12, 0x80); //Reset
-    ov7670_write_reg(ov7670, 0x3A, 0x0C); 
+    ov7670_write_reg(ov7670, 0x3A, 0x0D); 
     ov7670_write_reg(ov7670, 0x12, 0x08); //Reset
-    ov7670_write_reg(ov7670, 0x11, 7); //Reset
-    ov7670_write_reg(ov7670, 0x0C, 0x1C); //Reset
-    ov7670_read_reg(ov7670, 0x71, &value);
-    //ov7670_write_reg(ov7670, 0x71, value | 0x80); //Reset
-    ov7670_read_reg(ov7670, 0x76, &value);
-    ov7670_write_reg(ov7670, 0x76, value | 0x30); //Reset
-    ov7670_write_reg(ov7670, 0x15, 0x20); //Reset
-    ov7670_read_reg(ov7670, 0x70, &value);
-    ov7670_write_reg(ov7670, 0x70, value & 0x7F); //Reset
+    //ov7670_write_reg(ov7670, 0x11, 10); //Reset
+    ov7670_write_reg(ov7670, 0x0C, 0x0C); //Reset
+    // ov7670_read_reg(ov7670, 0x71, &value);
+    // //ov7670_write_reg(ov7670, 0x71, value | 0x80); //Reset
+    // ov7670_read_reg(ov7670, 0x76, &value);
+    // ov7670_write_reg(ov7670, 0x76, value | 0x30); //Reset
+    // ov7670_write_reg(ov7670, 0x15, 0x0); //Reset
+    // ov7670_read_reg(ov7670, 0x70, &value);
+    // ov7670_write_reg(ov7670, 0x70, value & 0x7F); //Reset
 
-    ov7670_write_reg(ov7670,0x3E, 0x19);
-    ov7670_write_reg(ov7670,0x72, 0x00);		
+	ov7670_write_reg(ov7670, 0x70, 0x3a);
+	ov7670_write_reg(ov7670, 0x70, 0x35);
+
+
+	ov7670_write_reg(ov7670, 0x11, 0x01);
+	ov7670_write_reg(ov7670, 0x6b, 0x0a);
+	ov7670_write_reg(ov7670, 0x2a, 0x00);
+	ov7670_write_reg(ov7670, 0x2b, 0x00);
+	ov7670_write_reg(ov7670, 0x92, 0x66);
+	ov7670_write_reg(ov7670, 0x93, 0x00);
+	ov7670_write_reg(ov7670, 0x3b, 0x0a);
+
+   
+
+    // ov7670_write_reg(ov7670,REG_SCALING_XSC, 0x3a);
+    // ov7670_write_reg(ov7670, REG_SCALING_YSC, 0x35);
+
+
+	ov7670_write_reg(ov7670,0x3E, 0x11);
+	//ov7670_write_reg(ov7670, 0x15, 32); //Reset
+    ov7670_write_reg(ov7670,0x72, 0x11);		
     ov7670_write_reg(ov7670,0x73, 0xf1);
-	ov7670_write_reg(ov7670,0xa2, 0x02);
-
-    ov7670_write_reg(ov7670,REG_SCALING_XSC, 0x40);
-    ov7670_write_reg(ov7670, REG_SCALING_YSC, 0x40);
-
+	ov7670_write_reg(ov7670,0xa2, 0x52);
 
 
 
@@ -111,7 +126,7 @@ int main()
 	ov7670_write_reg(ov7670, 0x38, 0x71);		ov7670_write_reg(ov7670,0x39, 0x2a );
 	ov7670_write_reg(ov7670, REG_COM12, 0x78);	ov7670_write_reg(ov7670,0x4d, 0x40 );
 	ov7670_write_reg(ov7670, 0x4e, 0x20 );		ov7670_write_reg(ov7670,REG_GFIX, 0);
-	ov7670_write_reg(ov7670, 0x6b, 0x4a );		ov7670_write_reg(ov7670,0x74, 0x10 );
+	/*ov7670_write_reg(ov7670, 0x6b, 0x4a );*/		ov7670_write_reg(ov7670,0x74, 0x10 );
    // ov7670_write_reg(ov7670, 0x6b, 0x0 );		ov7670_write_reg(ov7670,0x74, 0x10 );
 	ov7670_write_reg(ov7670, 0x8d, 0x4f );		ov7670_write_reg(ov7670,0x8e, 0    );
 	ov7670_write_reg(ov7670, 0x8f, 0    );		ov7670_write_reg(ov7670,0x90, 0    );
