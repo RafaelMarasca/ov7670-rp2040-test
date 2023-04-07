@@ -3,10 +3,13 @@
 #include "hardware/i2c.h"
 #include "hardware/pwm.h"
 #include "hardware/gpio.h"
+#include "hardware/dma.h"
+#include "capture.pio.h"
 #include <inttypes.h>
 #include <stdlib.h>
 
 
+uint8_t data[176*144*2] ={};
 
 struct ov7670
 {
@@ -65,11 +68,10 @@ ov7670_t* ov7670_init(ov7670_cfg_t* ov7670_cfg)
 
     gpio_set_function(ov7670->xclk, GPIO_FUNC_PWM);
     ov7670->pwm_slice_num = pwm_gpio_to_slice_num(ov7670->xclk);
-    pwm_set_clkdiv(ov7670->pwm_slice_num, 1.3);
-    pwm_set_wrap(ov7670->pwm_slice_num,4) ;
-    pwm_set_gpio_level(ov7670->xclk,2);
+    pwm_set_clkdiv(ov7670->pwm_slice_num, 1.3021);
+    pwm_set_wrap(ov7670->pwm_slice_num, 3);
+    pwm_set_gpio_level(ov7670->xclk, 2);
     pwm_set_enabled(ov7670->pwm_slice_num, true);
-
 
     return ov7670;
 }
@@ -99,6 +101,31 @@ int ov7670_read_reg(ov7670_t* ov7670, uint8_t reg, uint8_t* data)
 
 int ov7670_get_frame();
 
+int init_dma()
+{
+
+    uint offset = pio_add_program(pio0, &capture_program);
+    capture_program_init(pio0, 0, offset, 0);
+
+    pio_sm_put_blocking(pio0, 0, 144);
+    pio_sm_put_blocking(pio0, 0, 176*2);
+
+    int chan = dma_claim_unused_channel(true);
+    dma_channel_config cfg = dma_channel_get_default_config(chan);
+    channel_config_set_transfer_data_size(&cfg, DMA_SIZE_8);
+    channel_config_set_read_increment(&cfg, false);
+    channel_config_set_write_increment(&cfg, true);
+    channel_config_set_dreq(&cfg, DREQ_PIO0_RX0);
+    dma_channel_configure(
+        chan,          // Channel to be configured
+        &cfg,            // The configuration we just created
+        data,           // The initial write address
+        &pio0->rxf[0],           // The initial read address
+        176*144*2, // Number of transfers; in this case each is 1 byte.
+        true          // Start immediately.
+    );
 
 
+    dma_channel_wait_for_finish_blocking(chan);
 
+}

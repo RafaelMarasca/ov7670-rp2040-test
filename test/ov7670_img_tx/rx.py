@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import serial
 
-HEIGHT = 240
-WIDTH = 240
+HEIGHT = 144
+WIDTH = 176
 
 
 # img = cv2.imread("shrek.jpg")
@@ -26,41 +26,54 @@ WIDTH = 240
 #         # list.append(i)
 #     f.write('};')
 
+list =[]
+
 with serial.Serial('COM14', 115200) as ser:
-    list = ser.read(size = 57600)
+    ser.reset_input_buffer()
+    while(len(list)<176*144*3):
+        list =ser.read(size = 176*144*3)
 
+r = []
+g = []
+b = []
 
-# with open('shrek2.txt', 'w') as f:
-#     f.write('char shrek [] = {')
-#     for i in list:
-#         f.write(str(i))
-#         f.write(',')
-#     f.write('};')
+for index, element in enumerate(list):
+    if len(r) == len(g):
+        if len(b) == len(g):
+            r.append(element)
+        else:
+            b.append(element)
+    else:
+        g.append(element)
+        
+            
+# y_new = []
+# cb = []
+# cr = []
 
-y_new = []
-# # cb = []
-# # cr = []
-
-for index,element in enumerate(list):
-    y_new.append(element)
+# for index,element in enumerate(list):
 #     if (index)%2 != 0:
-#         if len(y_new) != len(cb):
-#             y_new.append(element)
-#     else:
-#         if len(cb) == len(cr):
-#             cb.append(element)
-#             #cb.append(element)
-#         else:
-#             cr.append(element)
-#             #cr.append(element)
+#         y_new.append(element)
+#     # else:
+#     #     if len(cb) == len(cr):
+#     #         cr.append(element)
+#     #         cr.append(element)
+#     #     else:
+#     #         cb.append(element)
+#     #         cb.append(element)
 
-y_new = np.array(y_new,dtype = np.uint8)
+
+# y_new = np.clip(y_new, 0,255);
+
+# # y_new = np.array(y_new,dtype = np.uint8)
 # # cb = np.array(cb,dtype = np.uint8)
 # # cr = np.array(cr,dtype = np.uint8)
 
-y_new = y_new.reshape((240,240), order = 'C')
-# cb = cb.reshape((240,240), order = 'C')
-# cr = cr.reshape((240,240), order = 'C')
+# y_new = np.uint8(y_new.reshape((144,176), order = 'C'))
+# # cb = cb.reshape((144,176), order = 'C')
+# cr = cr.reshape((144,176), order = 'C')
+
+
 
 # r = y_new + (1.403* (cr - 128))
 # g = y_new - (0.344*(cb - 128)) - (0.714*(cr-128))
@@ -82,13 +95,14 @@ y_new = y_new.reshape((240,240), order = 'C')
 # g = np.clip(g,0,255)
 # b = np.clip(b,0,255)
 
-# r = np.uint8(np.array(r).reshape((HEIGHT,WIDTH)))
-# g = np.uint8(np.array(g).reshape((HEIGHT,WIDTH)))
-# b = np.uint8(np.array(b).reshape((HEIGHT,WIDTH)))
+r = np.uint8(np.array(r).reshape((HEIGHT,WIDTH)))
+g = np.uint8(np.array(g).reshape((HEIGHT,WIDTH)))
+b = np.uint8(np.array(b).reshape((HEIGHT,WIDTH)))
 
 
-
-im = cv2.merge([y_new,y_new,y_new])
+im = cv2.merge([b,g,r])
+#im = cv2.merge([y_new,y_new,y_new])
 cv2.namedWindow('dysplay', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('dysplay', 500,500)
 cv2.imshow('dysplay', im)
 cv2.waitKey()

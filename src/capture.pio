@@ -1,0 +1,61 @@
+
+
+
+.program capture
+
+pull block
+MOV X, OSR
+
+pull block
+
+
+WAIT 1 GPIO 15
+
+WAIT 0 GPIO 15
+
+LINE_LOOP:
+MOV Y, OSR
+
+WAIT 1 GPIO 14
+
+PX_LOOP:
+WAIT 1 GPIO 13
+IN PINS, 8
+WAIT 0 GPIO 13
+JMP Y-- PX_LOOP
+
+WAIT 0 GPIO 14
+
+JMP X-- LINE_LOOP
+
+
+
+%c-sdk{
+    #include "hardware/clocks.h"
+    #include "hardware/gpio.h"
+
+    static inline void capture_program_init(PIO pio, uint sm, uint offset, uint base_pin)
+    {
+        pio_sm_set_enabled(pio, sm, false);
+        pio_sm_clear_fifos(pio, sm);
+        pio_sm_restart(pio, sm);
+
+        pio_sm_set_consecutive_pindirs(pio, sm, base_pin, 8, false);
+        for(int i = 0; i<8; i++)
+        {
+            pio_gpio_init(pio, base_pin+i);
+        }
+
+        pio_sm_config cfg = capture_program_get_default_config(offset);
+        sm_config_set_in_pins(&cfg, base_pin);
+        sm_config_set_in_shift(&cfg, true, true, 32);   
+        sm_config_set_out_shift(&cfg, true, true, 32);   
+
+        sm_config_set_clkdiv(&cfg, 1.0f);
+
+        pio_sm_init(pio,sm, offset, &cfg);
+        pio_sm_set_enabled(pio, sm, true);
+
+    }
+
+%}

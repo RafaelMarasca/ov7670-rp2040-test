@@ -8,6 +8,8 @@
 
 #define OV7670_SLAVE_ADDRESS 0x21 
 
+extern uint8_t data[176*144*2];
+
 typedef struct ov7670 ov7670_t;
 
 typedef enum
@@ -51,6 +53,8 @@ int ov7670_write_reg(ov7670_t* ov7670, uint8_t reg, uint8_t data);
 int ov7670_read_reg(ov7670_t* ov7670, uint8_t reg, uint8_t* data);
 
 int ov7670_get_frame();
+
+int init_dma();
 
 
 

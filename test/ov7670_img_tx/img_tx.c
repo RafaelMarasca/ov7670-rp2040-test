@@ -1,34 +1,37 @@
 #include "pico/stdlib.h"
 #include <stdio.h>
-#include "IMG.h"
+#include "img.h"
 
 int main()
 {
     stdio_init_all();
 
-    gpio_init(2);
-    gpio_set_dir(2, GPIO_IN);
+    gpio_init(24);
+    gpio_set_dir(24, GPIO_IN);
 
-    gpio_pull_up(2);
+    gpio_pull_up(24);
 
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
     gpio_put(25, 0);
 
+    while(!gpio_get(24));
+
     while(1)
     {
-        if(gpio_get(2) == 0)
+        while(gpio_get(24));
+    
         {
-            for(int i = 0; i<57600; i++)
+            for(int i = 0; i < img_data.width*img_data.height*3; i++)
             {
-                if(shrek[i] == '\n')
-                    printf("%c", shrek[i]+1);
+                if(img_data.data[i] == '\n')
+                    printf("%c", img_data.data[i]+1);
                 else
-                    printf("%c", shrek[i]);
+                    printf("%c", img_data.data[i]);
             }
-            //fwrite(test, 31, 31, stdout);
             gpio_put(25, 1);
+            sleep_ms(1000);
+            gpio_put(25,0);
         }    
-    }
-   
+    }   
 }
