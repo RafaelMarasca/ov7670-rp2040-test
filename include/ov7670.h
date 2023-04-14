@@ -8,23 +8,21 @@
 
 #define OV7670_SLAVE_ADDRESS 0x21 
 
-extern uint8_t data[176*144*2];
-
 typedef struct ov7670 ov7670_t;
 
-typedef enum
+typedef enum image_mode
 {
-    ov7670_VGA,
-    ov7670_QVGA,
-    ov7670_QQVGA,
-    ov7670_QCIF,
-    ov7670_QQCIF
+    OV7670_VGA,
+    OV7670_QVGA,
+    OV7670_QCIF,
+    OV7670_CIF
 } ov7670_image_mode_t;
 
-typedef enum
+typedef enum color_mode
 {
-    ov7670_YCBCR,
-    ov7670_RGB565
+    OV7670_YUV,
+    OV7670_RGB565,
+    OV7670_GRAY_LEVEL
 } ov7670_color_mode_t;
 
 
@@ -52,11 +50,11 @@ int ov7670_write_reg(ov7670_t* ov7670, uint8_t reg, uint8_t data);
 
 int ov7670_read_reg(ov7670_t* ov7670, uint8_t reg, uint8_t* data);
 
-int ov7670_get_frame();
+int ov7670_capture(ov7670_t* ov7670);
 
-int init_dma();
+int ov7670_get_buffer_size(ov7670_t* ov7670);
 
-
+uint8_t* ov7670_get_buffer(ov7670_t* ov7670);
 
 
 #endif //_OV7670_H_

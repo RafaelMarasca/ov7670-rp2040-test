@@ -9,6 +9,8 @@ MOV X, OSR
 pull block
 
 
+WAIT 0 GPIO 24
+
 WAIT 1 GPIO 15
 
 WAIT 0 GPIO 15
@@ -40,6 +42,11 @@ JMP X-- LINE_LOOP
         pio_sm_clear_fifos(pio, sm);
         pio_sm_restart(pio, sm);
 
+        pio_gpio_init(pio, 15);
+        pio_gpio_init(pio, 14);
+        pio_gpio_init(pio, 13);
+        pio_gpio_init(pio, 24);
+
         pio_sm_set_consecutive_pindirs(pio, sm, base_pin, 8, false);
         for(int i = 0; i<8; i++)
         {
@@ -48,10 +55,10 @@ JMP X-- LINE_LOOP
 
         pio_sm_config cfg = capture_program_get_default_config(offset);
         sm_config_set_in_pins(&cfg, base_pin);
-        sm_config_set_in_shift(&cfg, true, true, 32);   
-        sm_config_set_out_shift(&cfg, true, true, 32);   
+        sm_config_set_in_shift(&cfg, false, true, 32);   
+        sm_config_set_out_shift(&cfg, true, false, 32);   
 
-        sm_config_set_clkdiv(&cfg, 1.0f);
+        //sm_config_set_clkdiv(&cfg, 1.0f);
 
         pio_sm_init(pio,sm, offset, &cfg);
         pio_sm_set_enabled(pio, sm, true);
